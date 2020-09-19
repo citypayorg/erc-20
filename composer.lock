@@ -1,0 +1,141 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "7d76d8d29d8cbac0e1ef31adab6d6f0f",
+    "packages": [
+        {
+            "name": "furqansiddiqui/erc20-php",
+            "version": "0.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/furqansiddiqui/erc20-php.git",
+                "reference": "b5fe2d801e2a581e9537510c724dd70da1d9fda8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/furqansiddiqui/erc20-php/zipball/b5fe2d801e2a581e9537510c724dd70da1d9fda8",
+                "reference": "b5fe2d801e2a581e9537510c724dd70da1d9fda8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "furqansiddiqui/ethereum-rpc": "^0.1.5",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ERC20\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Interact with any ERC20 standard Ethereum token",
+            "keywords": [
+                "erc20",
+                "eth",
+                "ethereum",
+                "ethereum-go",
+                "geth",
+                "token",
+                "tokens"
+            ],
+            "time": "2020-04-02T15:18:50+00:00"
+        },
+        {
+            "name": "furqansiddiqui/ethereum-rpc",
+            "version": "0.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/furqansiddiqui/ethereum-rpc.git",
+                "reference": "cff5574a4f094a73ebd44f7ccf4f435335391c5d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/furqansiddiqui/ethereum-rpc/zipball/cff5574a4f094a73ebd44f7ccf4f435335391c5d",
+                "reference": "cff5574a4f094a73ebd44f7ccf4f435335391c5d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "ext-json": "*",
+                "furqansiddiqui/http-client": "^0.4.5",
+                "php": "^7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EthereumRPC\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Ethereum (geth) RPC client",
+            "keywords": [
+                "eth",
+                "ethereum",
+                "ethereum-go",
+                "geth"
+            ],
+            "time": "2020-04-02T15:12:20+00:00"
+        },
+        {
+            "name": "furqansiddiqui/http-client",
+            "version": "0.4.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/furqansiddiqui/http-client.git",
+                "reference": "fa735734b52296c92b9056cc5d716f2cae577faf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/furqansiddiqui/http-client/zipball/fa735734b52296c92b9056cc5d716f2cae577faf",
+                "reference": "fa735734b52296c92b9056cc5d716f2cae577faf",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HttpClient\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Straightforward HTTP client",
+            "keywords": [
+                "http",
+                "http-client"
+            ],
+            "time": "2019-12-22T22:46:32+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
+}

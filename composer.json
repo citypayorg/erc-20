@@ -1,0 +1,15 @@
+{
+    "name": "cloudcoin/ecr20",
+    "description": "CloudCoin Ecr20",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Miroch",
+            "email": "alexander.miroch@gmail.com"
+        }
+    ],
+    "require": {
+        "furqansiddiqui/erc20-php": "^0.1.4"
+    }
+}
