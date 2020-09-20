@@ -59,7 +59,15 @@ class DB {
 			return true;
 
 		return false;
+	}
 
+	function setTransactionTrx($id, $ethTrxId) {
+		$ts = time();
+		$sql = "UPDATE transactions SET status=" . TR_STATUS_SENT . ", updated_ts=$ts, ethtxid='$ethTrxId' WHERE id=$id";
+		if (mysqli_query($this->conn, $sql))
+			return true;
+
+		return false;
 	}
 	
 

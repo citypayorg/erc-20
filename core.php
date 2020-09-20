@@ -5,10 +5,12 @@ function debug($string) {
 	echo $string . "\n";
 }
 
+// Calls raida_go with view_receipt
 function verify_payment($guid, $amount, $skywallet) {
 	$cmd = RAIDA_GO_PATH . " view_receipt $guid $skywallet";
 	debug($cmd);
 
+	// Exec the binary
 	$json = exec($cmd, $outarray, $error_code);
 	if ($error_code != 0) {
 		debug("Invalid response from raida_go: $error_code, Output $json");
@@ -43,7 +45,7 @@ function verify_payment($guid, $amount, $skywallet) {
 	return 0;
 }
 
-
+// Sends tokens to the specified address '$to'
 function sendEth($geth, $token, $to, $amount) {
 	debug("Sending $amount eth to $to");
 
@@ -57,9 +59,9 @@ function sendEth($geth, $token, $to, $amount) {
 		print_r($txId);
 	} catch (Exception $e) {
 		debug("Error: " . $e->getMessage());
-		return 1;
+		return 0;
 	}
 
-	return 0;
+	return $txId;
 }
 

@@ -31,6 +31,7 @@ CREATE TABLE `transactions` (
   `updated_ts` int(11) DEFAULT NULL,
   `amount` int(11) DEFAULT NULL,
   `skywallet` varchar(256) DEFAULT NULL,
+  `ethtxid` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `gidx` (`guid`),
   KEY `ist` (`status`),
@@ -47,4 +48,4 @@ CREATE TABLE `transactions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-19 18:29:18
+-- Dump completed on 2020-09-19 18:59:45

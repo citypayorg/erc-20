@@ -18,17 +18,19 @@ require __DIR__ . '/vendor/autoload.php';
 use EthereumRPC\EthereumRPC;
 use ERC20\ERC20;
 
-$geth = new EthereumRPC(ETH_HOST, ETH_PORT);
+//$geth = new EthereumRPC(ETH_HOST, ETH_PORT);
+//$geth = new EthereumRPC("ropsten-rpc.linkpool.io", ETH_PORT);
+$geth = new EthereumRPC("217.23.158.163", ETH_PORT);
 $erc20 = new ERC20($geth);
 $token = $erc20->token(ETH_CONTRACT);
 
-
+/*
 $fp = @fsockopen(ETH_HOST, ETH_PORT, $errno, $errstr, 5);
 if (!$fp) 
 	die('Eth Wallet is not listening on the port ' . ETH_PORT);
 
 fclose($fp);
-
+*/
 // Connection to the Database
 $db = new DB(DB_HOST, DB_NAME, DB_USER, DB_PASS);
 $raida_go = RAIDA_GO_PATH;
@@ -64,10 +66,11 @@ $trs = $db->getVerifiedTransactions();
 foreach ($trs as $tr) {
 	debug("Proccessing transaction #" . $tr['id']);
 
-	// 0 - success
-	// 1 - fail
-	$rv = sendEth($geth, $token, $tr['ethaccount'], $tr['amount']);
+	$trId = sendEth($geth, $token, $tr['ethaccount'], $tr['amount']);
+	if ($trId == 0) {
+		debug("Failed to send Eth for #" . $tr['id']);
+		continue;
+	}
 
-	print_r($rv);
-
+	$db->setTransactionTrx($tr['id'], $trId);
 }
