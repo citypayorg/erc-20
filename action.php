@@ -46,7 +46,7 @@ $ip = gethostbyname($merchant);
 if (!filter_var($ip, FILTER_VALIDATE_IP))
 	die("Failed to resolve skywallet");
 
-if (!$db->putRecord($guid, $amount, $merchant, $ethAccount))
+if (!$db->putRecord($guid, $amount, $merchant, $ethAccount, DIR_CC, ""))
 	die("Failed to put record in the Database");
 
 header('Location: /success.php');

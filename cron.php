@@ -18,19 +18,19 @@ require __DIR__ . '/vendor/autoload.php';
 use EthereumRPC\EthereumRPC;
 use ERC20\ERC20;
 
-//$geth = new EthereumRPC(ETH_HOST, ETH_PORT);
-//$geth = new EthereumRPC("ropsten-rpc.linkpool.io", ETH_PORT);
-$geth = new EthereumRPC("217.23.158.163", ETH_PORT);
+$geth = new EthereumRPC(ETH_HOST, ETH_PORT);
+$abiPath = dirname(__FILE__) . "/erc20.abi";
 $erc20 = new ERC20($geth);
+$erc20->abiPath($abiPath);
 $token = $erc20->token(ETH_CONTRACT);
 
-/*
+
 $fp = @fsockopen(ETH_HOST, ETH_PORT, $errno, $errstr, 5);
 if (!$fp) 
 	die('Eth Wallet is not listening on the port ' . ETH_PORT);
 
 fclose($fp);
-*/
+
 // Connection to the Database
 $db = new DB(DB_HOST, DB_NAME, DB_USER, DB_PASS);
 $raida_go = RAIDA_GO_PATH;
@@ -67,10 +67,49 @@ foreach ($trs as $tr) {
 	debug("Proccessing transaction #" . $tr['id']);
 
 	$trId = sendEth($geth, $token, $tr['ethaccount'], $tr['amount']);
-	if ($trId == 0) {
+	echo "trxxx=$trId\n";
+	if ($trId === 0) {
 		debug("Failed to send Eth for #" . $tr['id']);
 		continue;
 	}
 
+	debug("Updating...");
 	$db->setTransactionTrx($tr['id'], $trId);
+}
+
+debug("Getting new Eth transactions");
+$trs = $db->getNewEthTransactions();
+foreach ($trs as $tr) {
+	debug("Proccessing transaction #" . $tr['id']);
+
+	// returns amount
+	// -1 - failed to query raida_go or network error. We will not mark the transaction and try again later
+	$amount = verifyEthTransaction($geth, $token, $tr['ethtxid']);
+	if ($amount == -1) {
+		continue;
+	}
+
+	$db->updateTransactionStatusAndAmount($tr['id'], TR_STATUS_VERIFIED, $amount);
+}
+
+debug("Getting verified Eth transactions");
+$trs = $db->getVerifiedEthTransactions();
+foreach ($trs as $tr) {
+	debug("Proccessing transaction #" . $tr['id']);
+
+	// 0 - success
+	// 1 - failed to query raida_go or network error. We will not mark the transaction and try again later
+	// 2 - permanent fail
+	$rv = sendCloudCoins($tr['amount'], $tr['skywallet'], "Transfer for eth #" . $tr['ethtxid']);
+	if ($rv == 0) {
+		$status = TR_STATUS_SENT;
+	} else if ($rv == 1) {
+		continue;
+	} else if ($rv == 2) {
+		$status = TR_STATUS_FAILED;
+	} else {
+		die("Internal error");
+	}
+
+	$db->updateTransactionStatus($tr['id'], TR_STATUS_SENT);
 }

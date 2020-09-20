@@ -7,15 +7,24 @@ class DB {
 		$this->conn = new mysqli($host, $user, $pass, $name);
 		if ($this->conn->connect_error)
 			die("Failed to connect to the Database");
+
+		$this->conn->autocommit(TRUE);
 	}
 
 	function close() {
 		$this->conn->close();
 	}
 
-	function putRecord($guid, $amount, $skywallet, $ethAccount) {
+	function putRecord($guid, $amount, $skywallet, $ethAccount, $dir, $txId) {
 		$ts = time();
-		$sql = "INSERT INTO transactions(guid, status, created_ts, updated_ts, amount, skywallet, ethaccount) VALUES('" . $guid . "', ". TR_STATUS_NEW . ", $ts, $ts, $amount, '" . $skywallet . "', '". $ethAccount . "');";
+
+		if ($guid == "")
+			$guidStr = "NULL";
+		else 
+			$guidStr = "'$guid'";
+
+		$sql = "INSERT INTO transactions(guid, status, created_ts, updated_ts, amount, skywallet, ethaccount, dir, ethtxid) VALUES($guidStr, ". TR_STATUS_NEW . ", $ts, $ts, $amount, '" . $skywallet . "', '". $ethAccount . "', " . $dir . ", '". $txId ."');";
+		echo $sql;
 		if (mysqli_query($this->conn, $sql))
 			return true;
 
@@ -25,7 +34,7 @@ class DB {
 	}
 
 	function getNewTransactions() {
-		$sql = "SELECT * FROM transactions WHERE status = " . TR_STATUS_NEW;
+		$sql = "SELECT * FROM transactions WHERE status = " . TR_STATUS_NEW . " AND dir = " . DIR_CC;
 		$result = $this->conn->query($sql);
 		if ($result->num_rows <= 0)
 			return [];
@@ -39,7 +48,7 @@ class DB {
 	}
 
 	function getVerifiedTransactions() {
-		$sql = "SELECT * FROM transactions WHERE status = " . TR_STATUS_VERIFIED;
+		$sql = "SELECT * FROM transactions WHERE status = " . TR_STATUS_VERIFIED . " AND dir = " . DIR_CC;
 		$result = $this->conn->query($sql);
 		if ($result->num_rows <= 0)
 			return [];
@@ -70,6 +79,43 @@ class DB {
 		return false;
 	}
 	
+
+	function getNewEthTransactions() {
+		$sql = "SELECT * FROM transactions WHERE status = " . TR_STATUS_NEW . " AND dir = " . DIR_ETH;
+		$result = $this->conn->query($sql);
+		if ($result->num_rows <= 0)
+			return [];
+
+		$rv = [];
+		while ($row = $result->fetch_assoc()) {
+			$rv[] = $row;
+		}
+
+		return $rv;
+	}
+
+	function updateTransactionStatusAndAmount($id, $status, $amount) {
+		$ts = time();
+		$sql = "UPDATE transactions SET status=$status, updated_ts=$ts, amount=$amount WHERE id=$id";
+		if (mysqli_query($this->conn, $sql))
+			return true;
+
+		return false;
+	}
+
+	function getVerifiedEthTransactions() {
+		$sql = "SELECT * FROM transactions WHERE status = " . TR_STATUS_VERIFIED . " AND dir = " . DIR_ETH;
+		$result = $this->conn->query($sql);
+		if ($result->num_rows <= 0)
+			return [];
+
+		$rv = [];
+		while ($row = $result->fetch_assoc()) {
+			$rv[] = $row;
+		}
+		
+		return $rv;
+	}
 
 }
 
