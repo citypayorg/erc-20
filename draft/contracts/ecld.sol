@@ -11,10 +11,9 @@ contract eCLD is ERC20Burnable {
     address private _owner;
     mapping (bytes32 => bool) private _receipts;
 
-	function _check_signature(bytes32 hash, uint8 v, bytes32 r, bytes32 s) internal {
+	function _check_signature(bytes32 hash, uint8 v, bytes32 r, bytes32 s) internal view {
      
-        // I don't fully understand this
-		//require(_owner == ecrecover(hash, v, r, s), "Signature invalid");
+		require(_owner == ecrecover(hash, v, r, s), "Signature invalid");
     }
 
 
