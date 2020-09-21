@@ -49,6 +49,7 @@ Notes
 
 * Remember Ethereum contracts are permanent, we can't update the code, and we must only deploy once
 * After deploying, it might be wise to remove the wallet from your metamask. The private key must be kept somewhere safe, and preferably off-line. It'll also be in the node used by our server.
+* If you make modifications to the solitidy code, keep in mind this IDE is editing versions of the file in the Browse's storage, not your filesystem. If you need to update the code, the changes from the IDE need to be copied back to the files in your git repository for pushing.
 
 Send questions to amanzur@protonmail.com
 
