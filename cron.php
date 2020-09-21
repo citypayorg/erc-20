@@ -82,14 +82,17 @@ $trs = $db->getNewEthTransactions();
 foreach ($trs as $tr) {
 	debug("Proccessing transaction #" . $tr['id']);
 
-	// returns amount
+	// returns amount + from
 	// -1 - failed to query raida_go or network error. We will not mark the transaction and try again later
-	$amount = verifyEthTransaction($geth, $token, $tr['ethtxid']);
-	if ($amount == -1) {
+	$rv = verifyEthTransaction($geth, $token, $tr['ethtxid'], $tr['skywallet'], $tr['signature']);
+	if ($rv == -1) {
 		continue;
 	}
 
-	$db->updateTransactionStatusAndAmount($tr['id'], TR_STATUS_VERIFIED, $amount);
+	$amount = $rv[0];
+	$from = $rv[1];
+
+	$db->updateTransactionStatusAndAmount($tr['id'], TR_STATUS_VERIFIED, $amount, $from);
 }
 
 debug("Getting verified Eth transactions");

@@ -15,7 +15,7 @@ class DB {
 		$this->conn->close();
 	}
 
-	function putRecord($guid, $amount, $skywallet, $ethAccount, $dir, $txId) {
+	function putRecord($guid, $amount, $skywallet, $ethAccount, $dir, $txId, $sig) {
 		$ts = time();
 
 		if ($guid == "")
@@ -23,7 +23,7 @@ class DB {
 		else 
 			$guidStr = "'$guid'";
 
-		$sql = "INSERT INTO transactions(guid, status, created_ts, updated_ts, amount, skywallet, ethaccount, dir, ethtxid) VALUES($guidStr, ". TR_STATUS_NEW . ", $ts, $ts, $amount, '" . $skywallet . "', '". $ethAccount . "', " . $dir . ", '". $txId ."');";
+		$sql = "INSERT INTO transactions(guid, status, created_ts, updated_ts, amount, skywallet, ethaccount, dir, ethtxid, signature) VALUES($guidStr, ". TR_STATUS_NEW . ", $ts, $ts, $amount, '" . $skywallet . "', '". $ethAccount . "', " . $dir . ", '". $txId ."', '$sig');";
 		echo $sql;
 		if (mysqli_query($this->conn, $sql))
 			return true;
@@ -94,9 +94,9 @@ class DB {
 		return $rv;
 	}
 
-	function updateTransactionStatusAndAmount($id, $status, $amount) {
+	function updateTransactionStatusAndAmount($id, $status, $amount, $from) {
 		$ts = time();
-		$sql = "UPDATE transactions SET status=$status, updated_ts=$ts, amount=$amount WHERE id=$id";
+		$sql = "UPDATE transactions SET status=$status, updated_ts=$ts, amount=$amount, ethaccount='$from' WHERE id=$id";
 		if (mysqli_query($this->conn, $sql))
 			return true;
 
