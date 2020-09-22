@@ -12,22 +12,23 @@ contract eCLD is ERC20Burnable {
     mapping (bytes32 => bool) private _receipts;
 
 	function _check_signature(bytes32 hash, uint8 v, bytes32 r, bytes32 s) internal view {
-     
-		require(_owner == ecrecover(hash, v, r, s), "Signature invalid");
-    }
 
+		address signer = ecrecover(hash, v, r, s);
+		require(_owner == signer, "Signature invalid");
+	}
 
 	function mint_with_receipt(address recipient, uint256 amount, uint256 uuid, uint8 v, bytes32 r, bytes32 s) public {
 
-        bytes32 hash = sha256(abi.encodePacked(recipient, amount, uuid));
-        require(!_receipts[hash], "Receipt already used");
-        
+		bytes32 hash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n84", recipient, amount, uuid));
+		require(!_receipts[hash], "Receipt already used");
+
 		_check_signature(hash, v, r, s);
-        
-        _mint(recipient, amount);
-        _receipts[hash] = true;
-    }
-    
+
+		_mint(recipient, amount);
+		_receipts[hash] = true;
+	}
+
+
     function mint(address recipient, uint256 amount) public {
         
         require(_owner == _msgSender());
@@ -36,7 +37,7 @@ contract eCLD is ERC20Burnable {
     }
 
 
-	constructor() ERC20("CloudCoin Etherium Bridge", "CCEB") public {
+	constructor() ERC20("CloudCoin Etherium", "CCE") public {
         
         _owner = _msgSender();
     }

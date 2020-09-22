@@ -16,8 +16,11 @@ abstract contract ERC20Burnable is Context, ERC20 {
      *
      * See {ERC20-_burn}.
      */
-    function burn(uint256 amount) public virtual {
-		require(amount % 1 ether == 0, "Invalid value for burn, only whole numbers can be burned.");
+
+	uint256 constant unit = 100000000;
+
+	function burn(uint256 amount) public virtual {
+		require(amount % (1 * unit) == 0, "Invalid value for burn, only whole numbers can be burned.");
 		_burn(_msgSender(), amount);
     }
 
