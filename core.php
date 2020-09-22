@@ -1,5 +1,6 @@
 <?php
 
+require_once './ecrecover_helper.php';
 
 function debug($string) {
 	echo $string . "\n";
@@ -65,8 +66,13 @@ function sendEth($geth, $token, $to, $amount) {
 }
 
 // Send request to Eth Blockchain to get a transaction receipt. If the transaction doesn't exist the code will throw an exception
-function verifyEthTransaction($geth, $token, $txId) {
+function verifyEthTransaction($geth, $token, $txId, $skywallet, $signature) {
 	debug("Checking trIx $txId");
+
+	if (!$signature) {
+		debug("No signature");
+		return -1;
+	}
 
 	try {
 		$transaction = $geth->eth()->getTransactionReceipt($txId);
@@ -84,7 +90,20 @@ function verifyEthTransaction($geth, $token, $txId) {
 			$amount = $amount / $factor;
 			debug("Final Amount $amount");
 
-			return $amount;
+			$tr = $geth->eth()->getTransaction($txId);
+			$from = $tr->from;
+
+			debug("From: $from, $skywallet");
+			$enc = "$from:$skywallet";
+			$presha_str = hex2bin(substr(keccak256('string Message'), 2) . substr(keccak256($enc), 2));
+			$hex = keccak256($presha_str);
+			$swallet = ecRecover($hex, $signature);
+			if ($swallet != $from) {
+				debug("Invalid signature");
+				return -1;
+			}
+
+			return [$amount, $from];
 		} else {
 			debug("Transaction failed or pending: " . $transaction->status);
 			return -1;

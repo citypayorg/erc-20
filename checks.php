@@ -6,3 +6,6 @@ if (!extension_loaded('mysqli'))
 
 if (!extension_loaded('json'))
 	die("JSON is not installed. Can't continue");
+
+if (!extension_loaded('gmp'))
+	die("GMP is not installed. Can't continue");
