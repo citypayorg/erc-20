@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.47, for Linux (x86_64)
+-- MySQL dump 10.14  Distrib 5.5.44-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: tokens
 -- ------------------------------------------------------
--- Server version	5.6.47
+-- Server version	5.5.44-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,13 +33,12 @@ CREATE TABLE `transactions` (
   `skywallet` varchar(256) DEFAULT NULL,
   `ethtxid` varchar(255) DEFAULT NULL,
   `dir` int(11) DEFAULT NULL,
-  `signature` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `gidx` (`guid`),
   UNIQUE KEY `eidx` (`ethtxid`),
   KEY `ist` (`status`),
   KEY `icreated` (`created_ts`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +50,4 @@ CREATE TABLE `transactions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-25  2:36:21
+-- Dump completed on 2020-09-20 16:56:00

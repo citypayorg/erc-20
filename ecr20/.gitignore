@@ -1,0 +1,5 @@
+raida_go
+*.swp
+*.swo
+vendor
+geth-linux-amd64*
